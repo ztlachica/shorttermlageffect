@@ -1,0 +1,28 @@
+library(EpiEstim)
+library(ggplot2)
+library(incidence)
+
+x <- read.csv(file.choose())
+summary(x)
+head(x$cases)
+
+plot(as.incidence(x$cases, dates = x$dates))
+
+#res_parametric_si
+
+#Yearly Window#
+
+window <- 7
+
+t_start <- 2:(length(x$cases)-window+ 1)
+t_end <- t_start +window - 1
+
+res_parametric_si <- estimate_R(x$cases,
+                                method="parametric_si",
+                                config = make_config(list(t_start=t_start,t_end=t_end,
+                                  mean_si = 4.8, std_si = 2.3, mean_prior = 2.6, std_prior= 2)))
+
+
+plot(res_parametric_si, "R", legend = TRUE)
+
+plot(res_parametric_si, legend = TRUE)
